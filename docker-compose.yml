@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: calendar_api
+    command: uvicorn main_api:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - ./token.json:/app/token.json
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    env_file:
+      - .env
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - calendar_network
+
+  ui:
+    build: .
+    container_name: calendar_ui
+    command: python main_ui.py
+    ports:
+      - "7860:7860"
+    volumes:
+      - .:/app
+      - ./token.json:/app/token.json
+    env_file:
+      - .env
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - calendar_network
+
+  db:
+    image: postgres:15
+    container_name: calendar_postgres
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - calendar_network
+
+volumes:
+  db_data:
+
+networks:
+  calendar_network:
+    driver: bridge

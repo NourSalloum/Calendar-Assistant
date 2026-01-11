@@ -1,0 +1,3 @@
+user_input,output,timestamp
+Put for me a meeting tomorrow from 10 am to 11 am,"Error: Expected dict, got Put for me a meeting tomorrow from 10 am to 11 am
+For troubleshooting, visit: https://docs.langchain.com/oss/python/langgraph/errors/INVALID_GRAPH_NODE_RETURN_VALUE",2025-12-26 19:06:08.069581
